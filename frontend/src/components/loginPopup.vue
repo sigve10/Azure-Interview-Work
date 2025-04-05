@@ -1,15 +1,20 @@
 <script setup>
 import { useUserStore } from '@/stores/userStore';
 
+const emit = defineEmits(["success", "closed"])
+
+const model = defineModel({
+	modelValue: Boolean
+})
+
 const userStore = useUserStore()
 const mail = ref("")
 const error = ref(undefined)
 
-const dialogState = ref(false)
-
 function onOk() {
 	if (userStore.setMail(mail.value)) {
-		dialogState.value = false
+		model.value = false
+		emit("success")
 	} else {
 		error.value = ["Invalid email"]
 	}
@@ -17,7 +22,7 @@ function onOk() {
 </script>
 
 <template>
-	<v-dialog v-model="dialogState" max-width="328px">
+	<v-dialog v-model="model" max-width="328px">
 		<v-card>
 			<v-card-title>
 				Please enter your email
@@ -27,10 +32,17 @@ function onOk() {
 					Please enter your email in order to save favorites.
 				</slot>
 
-				<v-text-field v-model="mail" :error-messages="error"/>
+				<v-text-field
+					v-model="mail"
+					label="user@domain.com"
+					variant="outlined"
+					class="mt-3"
+					:error-messages="error"
+					hide-details="auto"
+				/>
 			</v-card-text>
 			<v-card-actions>
-				<v-btn variant="outlined" @click="dialogState = false">
+				<v-btn variant="outlined" @click="model = false">
 					Cancel
 				</v-btn>
 				<v-btn

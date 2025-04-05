@@ -5,30 +5,36 @@ const MAIL_REGEX = /^\S+@\S+\.\S{2,3}$/
 
 export const useUserStore = defineStore("user", {
 	state: () => ({
-		email: undefined
+		email: undefined,
+		favorites: []
 	}),
 	actions: {
 		setMail(mail) {
 			if (MAIL_REGEX.test(mail)) {
 				this.email = mail
+				this.refreshFavorites()
+
 				return true;
 			}
 			return false;
 		},
 
-		async getIsFavorite(url) {
+		async refreshFavorites() {
 			if (!this.email) {
-				return new Promise(() => false)
+				this.favorites = []
+				return
 			}
 
 			return fetch(`${BACKEND_URL}/user/${this.email}`)
-				.then((response) => {
+				.then(response => {
 					if (!response.ok) {
 						throw new Error();
 					}
+
 					return response.json()
-				}).then((data) => {
-					return (data.includes(url))
+				}).then(data => {
+					this.favorites = data
+					return data
 				})
 		},
 
@@ -49,6 +55,16 @@ export const useUserStore = defineStore("user", {
 					}
 
 					return true;
+				}).then(() => {
+					if (value) {
+						this.favorites.push(url)
+					} else {
+						const index = this.favorites.indexOf(url)
+
+						if (index > -1) {
+							this.favorites.splice(index, 1)
+						}
+					}
 				})
 		}
 	}
