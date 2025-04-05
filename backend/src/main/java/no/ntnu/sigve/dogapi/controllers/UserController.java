@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
 import no.ntnu.sigve.dogapi.entity.User;
 import no.ntnu.sigve.dogapi.repository.UserRepository;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,37 +26,33 @@ public class UserController {
 		this.userRepository = userRepository;
 	}
 
-	@GetMapping("/{mail}")
-	public ResponseEntity<Set<String>> getUser(@PathVariable String mail) {
+	private User getOrCreateUser(String mail) {
 		Optional<User> user = userRepository.findById(mail);
 
 		if (!user.isPresent()) {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+			userRepository.save(new User(mail));
+			user = userRepository.findById(mail);
+
+			if (!user.isPresent()) {
+				throw new IllegalStateException("Failed to create user");
+			}
 		}
 
-		return new ResponseEntity<>(user.get().getFavorites(), HttpStatus.OK);
+		return user.get();
 	}
 
-	private void createUser(String mail) {
-		userRepository.save(new User(mail));
+	@GetMapping("/{mail}")
+	public ResponseEntity<Set<String>> getUser(@PathVariable String mail) {
+		User user = getOrCreateUser(mail);
+
+		return new ResponseEntity<>(user.getFavorites(), HttpStatus.OK);
 	}
 
 	@PostMapping("/{mail}")
 	public ResponseEntity<String> putFavorite(@PathVariable String mail, @RequestBody String url) {
-		Optional<User> userFound = userRepository.findById(mail);
+		User user = getOrCreateUser(mail);
 
-		if (!userFound.isPresent()) {
-			createUser(mail);
-			userFound = userRepository.findById(mail);
-
-			if (!userFound.isPresent()) {
-				throw new IllegalStateException("Could not create user");
-			}
-		}
-
-		User user = userFound.get();
 		user.addFavorite(url);
-
 		userRepository.save(user);
 
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -65,15 +60,9 @@ public class UserController {
 
 	@DeleteMapping("/{mail}")
 	public ResponseEntity<String> deleteFavorite(@PathVariable String mail, @RequestBody String url) {
-		Optional<User> userFound = userRepository.findById(mail);
+		User user = getOrCreateUser(mail);
 
-		if (!userFound.isPresent()) {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-		}
-
-		User user = userFound.get();
 		user.removeFavorite(url);
-
 		userRepository.save(user);
 
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
