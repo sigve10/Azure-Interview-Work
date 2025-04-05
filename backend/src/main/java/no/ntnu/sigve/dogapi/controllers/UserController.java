@@ -1,6 +1,8 @@
 package no.ntnu.sigve.dogapi.controllers;
 
 import java.util.Optional;
+import java.util.Set;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -12,7 +14,6 @@ import org.springframework.web.server.ResponseStatusException;
 import no.ntnu.sigve.dogapi.entity.User;
 import no.ntnu.sigve.dogapi.repository.UserRepository;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 
@@ -27,35 +28,31 @@ public class UserController {
 	}
 
 	@GetMapping("/{mail}")
-	public ResponseEntity<User> getUser(@PathVariable String mail) {
+	public ResponseEntity<Set<String>> getUser(@PathVariable String mail) {
 		Optional<User> user = userRepository.findById(mail);
 
 		if (!user.isPresent()) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 		}
 
-		return new ResponseEntity<>(user.get(), HttpStatus.OK);
+		return new ResponseEntity<>(user.get().getFavorites(), HttpStatus.OK);
+	}
+
+	private void createUser(String mail) {
+		userRepository.save(new User(mail));
 	}
 
 	@PostMapping("/{mail}")
-	public ResponseEntity<String> postUser(@PathVariable String mail) {
-		Optional<User> existingUser = userRepository.findById(mail);
-
-		if (existingUser.isPresent()) {
-			throw new ResponseStatusException(HttpStatus.CONFLICT);
-		}
-
-		userRepository.save(new User(mail));
-
-		return new ResponseEntity<>(HttpStatus.CREATED);
-	}
-
-	@PutMapping("/{mail}/favorite")
 	public ResponseEntity<String> putFavorite(@PathVariable String mail, @RequestBody String url) {
 		Optional<User> userFound = userRepository.findById(mail);
 
 		if (!userFound.isPresent()) {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+			createUser(mail);
+			userFound = userRepository.findById(mail);
+
+			if (!userFound.isPresent()) {
+				throw new IllegalStateException("Could not create user");
+			}
 		}
 
 		User user = userFound.get();
@@ -66,7 +63,7 @@ public class UserController {
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 
-	@DeleteMapping("/{mail}/favorite")
+	@DeleteMapping("/{mail}")
 	public ResponseEntity<String> deleteFavorite(@PathVariable String mail, @RequestBody String url) {
 		Optional<User> userFound = userRepository.findById(mail);
 
