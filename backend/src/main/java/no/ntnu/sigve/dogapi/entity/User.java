@@ -13,7 +13,7 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "favorites")
 public class User {
-	static final Pattern MAIL_PATTERN = Pattern.compile("[\\S]+@[\\S]+\\.[\\S]{2,3}");
+	static final Pattern MAIL_PATTERN = Pattern.compile("^\\S+@\\S+\\.\\S{2,3}$");
 
 	@Id
 	protected String mail;
