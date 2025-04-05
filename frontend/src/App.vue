@@ -5,7 +5,7 @@ const tab = ref(0)
 <template>
 	<v-app>
 		<v-app-bar>
-			<v-tabs>
+			<v-tabs v-model="tab">
 				<v-tab>
 					Dogs
 				</v-tab>
@@ -15,9 +15,9 @@ const tab = ref(0)
 			</v-tabs>
 		</v-app-bar>
 		<v-main>
-			<v-window>
+			<v-window v-model="tab" class="page-container">
 				<v-window-item class="page-window">
-
+					<dog-carousel />
 				</v-window-item>
 				<v-window-item class="page-window">
 
@@ -28,7 +28,7 @@ const tab = ref(0)
 </template>
 
 <style scoped lang="scss">
-.page-window {
+.page-container {
 	min-height: calc(100vh - var(--v-layout-top));
 	max-width: 728px;
 	margin: auto;
