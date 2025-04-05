@@ -20,7 +20,7 @@ const tab = ref(0)
 					<dog-carousel />
 				</v-window-item>
 				<v-window-item class="page-window">
-
+					<dog-favorites />
 				</v-window-item>
 			</v-window>
 		</v-main>
@@ -30,7 +30,7 @@ const tab = ref(0)
 <style scoped lang="scss">
 .page-container {
 	min-height: calc(100vh - var(--v-layout-top));
-	max-width: 728px;
+	max-width: max(728px, 70vw);
 	margin: auto;
 	padding: 16px 24px;
 }
