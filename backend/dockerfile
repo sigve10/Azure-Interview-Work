@@ -1,0 +1,11 @@
+# Use an official OpenJDK runtime as a parent image
+FROM openjdk:17-jdk-slim
+
+# Copy the Spring Boot jar into the container
+COPY target/dogapi.jar /app/dogapi.jar
+
+# Set the working directory
+WORKDIR /app
+
+# Run the jar file
+ENTRYPOINT ["java", "-jar", "dogapi.jar"]
