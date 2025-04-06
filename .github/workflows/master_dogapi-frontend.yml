@@ -12,6 +12,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./frontend
     permissions:
       contents: read #This is required for actions/checkout
 
@@ -21,6 +24,7 @@ jobs:
       - name: Set up Node.js version
         uses: actions/setup-node@v3
         with:
+          cache-dependency-path: frontend/package-lock.json
           node-version: '22.x'
 
       - name: npm install, build, and test
@@ -60,5 +64,5 @@ jobs:
         with:
           app-name: 'dogapi-frontend'
           slot-name: 'Production'
-          package: .
+          package: ./frontend/dist
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_3CF819A5C16F4404BE12A780D0F1418E }}
