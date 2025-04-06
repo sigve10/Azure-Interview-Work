@@ -47,25 +47,28 @@ function onFavoriteClicked() {
 			class="dog-image"
 			eager
 		>
-			<v-dialog activator="parent" class="dog-preview">
-				<v-img
+			<v-dialog
+				activator="parent"
+				content-class="dog-preview"
+				width="auto"
+			>
+				<img
 					:src="props.src"
 					alt="A dog"
-					max-height="80vh"
 					class="dog-preview-image"
-				/>
+				>
 			</v-dialog>
 		</v-img>
 		<v-btn
 			class="favorite-button"
 			:class="{'active': isFavorite}"
 			icon
-			color="amber"
+			:color="isFavorite ? 'amber' : 'white'"
 			variant="text"
 			density="comfortable"
 			@click="onFavoriteClicked"
 		>
-			<v-icon color="amber">
+			<v-icon>
 				mdi-star{{ isFavorite ? '' : '-outline' }}
 			</v-icon>
 			<login-popup v-model="popupActive" />
@@ -100,7 +103,7 @@ function onFavoriteClicked() {
 	}
 
 	&:hover .favorite-button {
-		opacity: 1 !important;
+		opacity: 1;
 	}
 
 	.favorite-button {
@@ -108,9 +111,7 @@ function onFavoriteClicked() {
 		top: 8px;
 		right: 8px;
 
-		&:not(.active) {
-			opacity: 0.2;
-		}
+		opacity: 0.8;
 	}
 
 	.dog-image, .favorite-button {
@@ -124,11 +125,16 @@ function onFavoriteClicked() {
 	}
 
 }
+
+.dog-preview-image {
+	height: 80vh;
+	object-fit: contain;
+}
+</style>
+
+<!-- Unscoped style to handle image non-interactivity -->
+<style lang="scss">
 .dog-preview {
-	max-height: 100vh;
-	max-width: 80vw;
-	display: flex;
-	align-items: center;
-	justify-content: center;
+	pointer-events: none;
 }
 </style>
