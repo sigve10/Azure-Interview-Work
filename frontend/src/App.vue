@@ -1,19 +1,26 @@
 <script setup>
 const tab = ref(0)
+
+const tabItems = [
+	{
+		name: "Find Dogs",
+		icon: "mdi-dog",
+		color: "brown"
+	},
+	{
+		name: "Favorites",
+		icon: "mdi-star",
+		color: "warning"
+	}
+]
 </script>
 
 <template>
 	<v-app>
-		<v-app-bar>
-			<v-tabs v-model="tab">
-				<v-tab>
-					Dogs
-				</v-tab>
-				<v-tab>
-					Favorites
-				</v-tab>
-			</v-tabs>
-		</v-app-bar>
+		<s-appbar
+			v-model="tab"
+			:items="tabItems"
+		/>
 		<v-main>
 			<v-window v-model="tab" class="page-container">
 				<v-window-item class="page-window">

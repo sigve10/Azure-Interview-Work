@@ -1,15 +1,19 @@
 <script setup>
-import { fetchDog } from '@/plugins/dogFetcher';
+import { dogApi } from '@/plugins/dogFetcher'
 
 const DOG_COUNT = 12
 
 const currentDogs = ref([])
 const selectedWindow = ref(0)
 
-function fetchNewDogs(count) {
-	fetchDog(count)
+function fetchNewDogs(count, breed=undefined) {
+	dogApi.getRandomDogs(count, breed)
 		.then((urls) => currentDogs.value = urls)
 		.then(() => selectedWindow.value = 0)
+}
+
+function onRefresh(breed) {
+	fetchNewDogs(DOG_COUNT, breed)
 }
 
 fetchNewDogs(DOG_COUNT)
@@ -18,9 +22,7 @@ fetchNewDogs(DOG_COUNT)
 <template>
 	<div>
 		<div class="more-dog-btn">
-			<v-btn color="primary" @click=fetchNewDogs(DOG_COUNT)>
-				Find new dogs
-			</v-btn>
+			<s-dog-actions @refresh="onRefresh"/>
 		</div>
 		<dog-grid :dogs="currentDogs" />
 	</div>
