@@ -34,6 +34,7 @@ function onFavoriteClicked() {
 	<v-sheet
 		class="dog-sheet"
 		:style="{ '--dog-src': `url(${props.src})` }"
+		v-ripple
 	>
 		<div
 			aria-hidden
@@ -50,6 +51,8 @@ function onFavoriteClicked() {
 				<v-img
 					:src="props.src"
 					alt="A dog"
+					max-height="80vh"
+					class="dog-preview-image"
 				/>
 			</v-dialog>
 		</v-img>
@@ -74,6 +77,7 @@ function onFavoriteClicked() {
 .dog-sheet {
 	--dog-src: "";
 	position: relative;
+	cursor: pointer;
 
 
 	display: flex;
@@ -89,13 +93,14 @@ function onFavoriteClicked() {
 		position: absolute;
 		width: 100%;
 		height: 100%;
-		filter: blur(42px);
-		opacity: 0.7;
+		filter: blur(8px);
 		pointer-events: none;
+
+		opacity: 0.6;
 	}
 
-	&:hover .favorite-button{
-		opacity: 1;
+	&:hover .favorite-button {
+		opacity: 1 !important;
 	}
 
 	.favorite-button {

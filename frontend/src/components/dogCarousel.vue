@@ -1,7 +1,7 @@
 <script setup>
 import { fetchDog } from '@/plugins/dogFetcher';
 
-const DOG_COUNT = 5
+const DOG_COUNT = 12
 
 const currentDogs = ref([])
 const selectedWindow = ref(0)
@@ -16,30 +16,21 @@ fetchNewDogs(DOG_COUNT)
 </script>
 
 <template>
-	<div class="dog-carousel">
-		<v-carousel v-model="selectedWindow" height="auto">
-			<v-carousel-item v-for="dog in currentDogs" :key="dog">
-				<dog-image :src="dog" />
-			</v-carousel-item>
-		</v-carousel>
-		<v-btn
-			color="primary"
-			block
-			@click="fetchNewDogs(DOG_COUNT)"
-		>
-			Find new dogs!
-		</v-btn>
+	<div>
+		<div class="more-dog-btn">
+			<v-btn color="primary" @click=fetchNewDogs(DOG_COUNT)>
+				Find new dogs
+			</v-btn>
+		</div>
+		<dog-grid :dogs="currentDogs" />
 	</div>
 </template>
 
 <style scoped lang="scss">
-.dog-carousel {
-	display: flex;
-	align-items: center;
-	flex-direction: column;
-	gap: 16px;
-
+.more-dog-btn {
 	width: 100%;
-
+	display: flex;
+	justify-content: center;
+	margin: 16px 8px;
 }
 </style>
