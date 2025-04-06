@@ -1,1 +1,1 @@
-export const BACKEND_URL = "https://dogapi-app.happypond-52616492.swedencentral.azurecontainerapps.io/"
+export const BACKEND_URL = "https://dogapi-app.happypond-52616492.swedencentral.azurecontainerapps.io"
