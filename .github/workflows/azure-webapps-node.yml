@@ -1,4 +1,4 @@
-# This workflow will build and push a node.js application to an Azure Web App when a commit is pushed to your default branch.
+t# This workflow will build and push a node.js application to an Azure Web App when a commit is pushed to your default branch.
 #
 # This workflow assumes you have already created the target Azure App Service web app.
 # For instructions see https://docs.microsoft.com/en-us/azure/app-service/quickstart-nodejs?tabs=linux&pivots=development-environment-cli
@@ -33,6 +33,9 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./frontend
     steps:
     - uses: actions/checkout@v4
 
@@ -44,7 +47,6 @@ jobs:
 
     - name: npm install, build, and test
       run: |
-        cd frontend
         npm install
         npm run build --if-present
         npm run test --if-present
