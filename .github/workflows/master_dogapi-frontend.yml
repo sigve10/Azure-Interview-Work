@@ -34,7 +34,7 @@ jobs:
           npm run test --if-present
 
       - name: Zip artifact for deployment
-        run: zip release.zip ./* -r
+        run: zip release.zip ./dist/* -r
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
@@ -64,5 +64,5 @@ jobs:
         with:
           app-name: 'dogapi-frontend'
           slot-name: 'Production'
-          package: ./frontend/dist
+          package: .
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_3CF819A5C16F4404BE12A780D0F1418E }}
