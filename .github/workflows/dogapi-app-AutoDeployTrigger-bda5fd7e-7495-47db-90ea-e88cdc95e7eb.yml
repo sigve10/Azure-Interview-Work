@@ -7,11 +7,7 @@ on:
     branches: 
       [ master ]
     paths:
-    - '**'
-    - '.github/workflows/dogapi-app-AutoDeployTrigger-bda5fd7e-7495-47db-90ea-e88cdc95e7eb.yml'
-
-  # Allow manual trigger 
-  workflow_dispatch:      
+    - 'backend/**'
 
 jobs:
   build-and-deploy:
