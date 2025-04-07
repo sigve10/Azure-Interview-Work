@@ -5,9 +5,11 @@ This application was developed as part of a challenge provided by SFE to develop
 - Java SDK 17
 - Node
 - NPM
+- MSSQL
 ## Setting up dev environment
 In order to run the repository on your local machine:
 - You must have a MSSQL database, either hosted or local
+	- The database must contain the empty schema `data`
 - You must define the following environment variables:
 	- frontend-url=[The URL to your frontend, typically [http://localhost:3000/]()
 	- database-password=[Your database password]
