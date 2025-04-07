@@ -22,7 +22,10 @@ const tabItems = [
 			:items="tabItems"
 		/>
 		<v-main>
-			<v-window v-model="tab" class="page-container">
+			<v-window
+				v-model="tab"
+				class="page-container"
+			>
 				<v-window-item class="page-window">
 					<dog-carousel />
 				</v-window-item>
