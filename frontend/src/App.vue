@@ -3,12 +3,12 @@ const tab = ref(0)
 
 const tabItems = [
 	{
-		name: "Find Dogs",
+		name: "Discover",
 		icon: "mdi-dog",
 		color: "brown"
 	},
 	{
-		name: "Favorites",
+		name: "My Gallery",
 		icon: "mdi-star",
 		color: "warning"
 	}
