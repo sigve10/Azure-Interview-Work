@@ -2,6 +2,7 @@ name: Trigger auto deployment for dogapi-app
 
 # When this action will be executed
 on:
+  workflow_dispatch:
   # Automatically trigger it when detected changes in repo
   push:
     branches: 
